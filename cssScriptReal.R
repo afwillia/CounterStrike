@@ -3,7 +3,7 @@ library(stringr)
 #import console data
 console.data <- readLines(con = "file.log")
 
-#find rows with killing information.
+#find rows with killing information. maybe add second grep for "with"
 kill.data <- grep("killed", console.data, value=TRUE)
 
 #make separate df for timestamped kills
@@ -40,7 +40,7 @@ kill.numbers <- sort(table(kill.subset$killed), decreasing = TRUE)
 
 #barplot people player killed
 barplot(kill.numbers, border = NA, 
-        names.arg = names(kill.numbers),las = 2,,ylim =c(0,5))
+        names.arg = names(kill.numbers),las = 2)
 
 #subset killed
 killed.subset <- subset(df, subset = killed == "Bilbo T. Baggins")
@@ -48,7 +48,7 @@ killed.numbers <- sort(table(killed.subset$killer), decreasing = TRUE)
 
 #barplot of people who killed player
 barplot(killed.numbers, border = NA, 
-        names.arg = names(killed.numbers),las = 2,,ylim =c(0,5))
+        names.arg = names(killed.numbers),las = 2)
 
 
 
