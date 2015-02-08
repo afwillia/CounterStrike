@@ -109,3 +109,38 @@ barplot(killed.player.weaps[killed.player.weaps > 0],
 
 dev.off()
 
+
+####total kill info
+all.kills <- table(df$killer)
+all.deaths <- table(df$killed)
+
+barplot(sort(all.kills, decreasing = TRUE), border = NA, las = 2,
+        main = "All kills")
+
+#########################################################
+# make df of all player kills and deaths
+##########
+
+player.deaths <- as.data.frame(all.deaths)
+names(player.deaths) <- c("player", "deaths")
+
+player.kills <- as.data.frame(all.kills)
+names(player.kills) <- c("player", "kills")
+
+player.df <- merge(player.deaths, player.kills, by = "player", all.x=TRUE)
+
+###########################################
+
+#same plot as above, just ordered alphabetically
+with(player.df, barplot((kills / deaths),
+                        border = NA, names.arg = player,
+                        las = 2, main = "Kills/Deaths"))
+abline(h = mean(player.df$kills/player.df$deaths, na.rm = TRUE), col = "red")
+
+with(player.df, barplot(kills, border = NA, names.arg = player, 
+                        las = 2, main = "Kills"))
+abline(h = mean(player.df$kills, na.rm = TRUE), col = "red")
+
+with(player.df, barplot(deaths, border = NA, names.arg = player,
+                        las = 2, main = "Deaths"))
+abline(h = mean(player.df$deaths, na.rm = TRUE), col = "red")
