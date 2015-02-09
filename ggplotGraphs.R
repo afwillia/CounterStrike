@@ -4,7 +4,6 @@ library(ggplot2)
 #aes( x = substr(var, 1, 8)) trims the x labels!
 #theme(axis.title.x = element_blank() makes bad label go away!)
 
-
 #bar plot of players that killed player, filled with weapon
 p <- ggplot(subset(clean.df, subset = killed == "Bilbo T. Baggins"), 
             aes(x = substr(killer, 1, 8)))
