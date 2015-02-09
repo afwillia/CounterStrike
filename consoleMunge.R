@@ -1,5 +1,6 @@
 ### This is the first part of several scripts to clean and graph CSS data
 ### This is all about cleaning up the CSS console data
+
 #######################################################################
 ###                           To Do:
 ###   A:  For actual data, remove the timestamp subsetting from lines 24,25
@@ -47,25 +48,14 @@ all.kill.data <- unlist(all.kill.data)
 data.list <- lapply(all.kill.data, 
                     function(x) strsplit(x, split = " killed | with "))
 
-#this is a much better way of representing the data and tabling it.
-df <- data.frame(matrix(unlist(data.list), 
+#make df for console data that is just killer, killed, and weapon
+clean.df <- data.frame(matrix(unlist(data.list), 
                         nrow=length(data.list), byrow=T))
-names(df) <- c("killer", "killed", "weapon")
+names(clean.df) <- c("killer", "killed", "weapon")
+
+#shorten names to 8 characters for easier labeling
+#short.df <- sapply(clean.df, function(x) substr(as.character(x), 1, 8))
 
 #this would be the spot where I try to add time information
-
-#Finally, create a df for all player's kills and deaths
-all.kills <- table(df$killer)
-all.deaths <- table(df$killed)
-
-player.deaths <- as.data.frame(all.deaths)
-names(player.deaths) <- c("player", "deaths")
-
-player.kills <- as.data.frame(all.kills)
-names(player.kills) <- c("player", "kills")
-
-player.df <- merge(player.deaths, player.kills, by = "player", all.x=TRUE)
-player.df[is.na(player.df$kills), "kills"] <- 0
-player.df[is.na(player.df$deaths), "deaths"] <- 0
 
 print("Before importing next script make variable player = player you want to track")

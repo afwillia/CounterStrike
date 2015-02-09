@@ -133,14 +133,14 @@ player.df <- merge(player.deaths, player.kills, by = "player", all.x=TRUE)
 
 #same plot as above, just ordered alphabetically
 with(player.df, barplot((kills / deaths),
-                        border = NA, names.arg = player,
+                        border = NA, names.arg = sapply(player, substr, 1, 10),
                         las = 2, main = "Kills/Deaths"))
 abline(h = mean(player.df$kills/player.df$deaths, na.rm = TRUE), col = "red")
 
-with(player.df, barplot(kills, border = NA, names.arg = player, 
+with(player.df, barplot(kills, border = NA, names.arg = sapply(player, substr, 1, 10), 
                         las = 2, main = "Kills"))
 abline(h = mean(player.df$kills, na.rm = TRUE), col = "red")
 
-with(player.df, barplot(deaths, border = NA, names.arg = player,
+with(player.df, barplot(deaths, border = NA, names.arg = sapply(player, substr, 1, 10),
                         las = 2, main = "Deaths"))
 abline(h = mean(player.df$deaths, na.rm = TRUE), col = "red")
