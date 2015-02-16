@@ -2,7 +2,8 @@
 
 source("roundInfo.R")
 
-
+library(reshape2)
+library(ggplot2)
 ##########################################################
 #now create a df for kills by round
 
@@ -15,7 +16,7 @@ merge.all <- function(x, y)
 
 #warning is just for duplicated col names
 kill.rounds.df <- Reduce(merge.all, kills.rounds.df.list)
-names(kill.rounds.df) <- c("killer", paste("r", 1:18, sep = "."))
+names(kill.rounds.df) <- c("killer", paste("r", 1:length(kills.rounds.df.list), sep = "."))
 
 kills.rounds.melt <- melt(kill.rounds.df)
 names(kills.rounds.melt) <- c("killer", "round", "kills")
@@ -32,7 +33,7 @@ pdf(paste0(Sys.Date(), player, "RoundKills.pdf"), 11.5, 8)
 #too tricky now- need to determine how many rounds individuals played
 #abline(h = nrow(s)/(max(s$round) - s$round[1]), col = "blue")
 
-p <- ggplot(subset(kills.rounds.melt, subset = killer == player | killer == "Link"),
+p <- ggplot(subset(kills.rounds.melt, subset = killer == player),
             aes(x = round, y = kills, group = killer))
 p + geom_line(aes(col = killer))
 

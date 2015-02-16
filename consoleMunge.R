@@ -12,8 +12,6 @@
 #  and               con_timestamp 1
 #to set up logging properly
 
-library(lubridate)
-
 #import console data. ideally change file to log location
 data.file <- "D:/Program Files/Steam/SteamApps/common/Counter-Strike Source/cstrike/file.log"
 console.data <- readLines(con = data.file)
