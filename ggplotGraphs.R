@@ -1,5 +1,8 @@
 # needs clean.df from consoleMunge.R
 
+#import clean.df from script
+source("consoleMunge.R")
+
 library(ggplot2)
 #aes( x = substr(var, 1, 8)) trims the x labels!
 #theme(axis.title.x = element_blank() makes bad label go away!)

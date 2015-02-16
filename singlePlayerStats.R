@@ -1,9 +1,13 @@
+# REQUIRES console.Munge.R  (uses clean.df)
+#Set player variable in console
+
 ##### This creates 4 graphs of individual "player" information
 ##  Player kills, Players that killed players, guns player used,
 ## and guns that killed player.
 
-#make a variable for player ID to use in following functions
-player = "Bilbo T. Baggins"
+#import clean.df from script
+source("consoleMunge.R")
+
 
 #open pdf device for saving plots
 pdf(paste0(Sys.Date(), player, ".pdf"), 11.5, 8)
@@ -20,8 +24,8 @@ par(cex.axis = 0.7)
 #barplot people player killed
 #subset > 0 to remove empty columns
 barplot(kill.numbers[kill.numbers > 0], border = NA, 
-        names.arg = names(kill.numbers[kill.numbers > 0]),
-        main = paste(player, "kills", sep = " "))
+        names.arg = substr(names(kill.numbers[kill.numbers > 0]), 1, 8),
+        main = paste(player, "kills", sep = " "), las = 2)
 
 #subset killed
 killed.subset <- subset(clean.df, subset = killed == player)

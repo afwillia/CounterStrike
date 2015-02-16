@@ -1,0 +1,13 @@
+So far we have:
+
+1.consoleMunge.R-
+  takes raw console data and turns it into df of time, killer, killed, and weapon
+  clean.df is final output
+
+2. cssRoundInfo.R-
+  Does same thing as consoleMunge.R and adds additional column for round.
+  Also makes df for each player's kills by round
+  out and round.df are final output and round.time is a vector of round endings.
+  let's make a vector of round beginnings.
+
+3.

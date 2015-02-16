@@ -1,61 +1,54 @@
 ### This is the first part of several scripts to clean and graph CSS data
-### This is all about cleaning up the CSS console data
+### This outputs console data into df with time, killer, killed, and weapon
 
 #######################################################################
 ###                           To Do:
-###   A:  For actual data, remove the timestamp subsetting from lines 24,25
-###     My real data will all have timestamp data
-###
 ###   B:  Figure out what to do with timestamp information.
-###       Currently I'm filtering it out.
 ###   C: Find a more robust way of filtering out non killing data
 ###   D: Account for round information, map changes, etc
 ##################################################################
 
+#Start CSS and enter con_logfile file.log
+#  and               con_timestamp 1
+#to set up logging properly
+
+library(lubridate)
+
 #import console data. ideally change file to log location
-console.data <- readLines(con = "file.log")
+data.file <- "D:/Program Files/Steam/SteamApps/common/Counter-Strike Source/cstrike/file.log"
+console.data <- readLines(con = data.file)
 
 #find rows with killing information. maybe add second grep for "with"
 kill.data <- grep("killed", console.data, value=TRUE)
 kill.data <- grep("with", kill.data, value=TRUE)
 
-#make separate df for timestamped kills. this is temporary
-#later filter out timestamp info, then combine with rest of data
-kill.data.notime <- kill.data[1:122]
-kill.data.ts <- kill.data[123:144]
-
 #timestamp has 13 characters of date we can get rid of, 23 counting time.
-#time is HH:MM:SS:   -- maybe filter out last colon?
-#delete all time information for now... come back to it later
-
-#based off above info, make function to extract last 24 to nchar()
-#characters from string - removing the timestamp info.
-#later if i want to include timestamp, make first cutoff 13
-
+#make function to extract last 24 to nchar()-1 characters from string - 
+#removing the timestamp info. later if i want to include timestamp, make first cutoff 13
 stringSplit <- function(x) {
-  substring(x, 24, nchar(x))
+  substring(x, 14, nchar(x)-1)
 }
 
 #make list of trimmed data. now it looks just like timestamp-free data
-kill.data.minus.ts <- lapply(kill.data.ts, stringSplit)
+all.kill.data <- lapply(kill.data, stringSplit)
 
-#combine non timestamp and timestamped data into one list
-all.kill.data <- c(kill.data.minus.ts, kill.data.notime)
-all.kill.data <- unlist(all.kill.data)
-
-#split all lines by " killed " and " with ", so we get killer, killed,
-# and weapon
+#split all lines by " killed " and " with ", so we get killer, killed, and weapon
 data.list <- lapply(all.kill.data, 
-                    function(x) strsplit(x, split = " killed | with "))
+                    function(x) strsplit(x, split = ": | killed | with "))
 
 #make df for console data that is just killer, killed, and weapon
 clean.df <- data.frame(matrix(unlist(data.list), 
                         nrow=length(data.list), byrow=T))
-names(clean.df) <- c("killer", "killed", "weapon")
+names(clean.df) <- c("time", "killer", "killed", "weapon")
 
-#shorten names to 8 characters for easier labeling
-#short.df <- sapply(clean.df, function(x) substr(as.character(x), 1, 8))
+#make time POSIXlt class
+clean.df$time <- strptime(as.character(clean.df$time), "%H:%M:%S")
 
-#this would be the spot where I try to add time information
+#clean up environment
+rm(all.kill.data, console.data, data.file, data.list, kill.data)
 
+#message for set player of interest before plotting
 print("Before importing next script make variable player = player you want to track")
+
+
+
